@@ -1,0 +1,154 @@
+{
+    "park": {
+      "name": "Kings Island",
+      "location": "Mason, Ohio, USA",
+      "year_opened": 1972,
+      "coasters": [
+        {
+          "name": "Adventure Express",
+          "type": "Mine train coaster",
+          "height": "50 feet",
+          "length": "1,150 feet",
+          "speed": "35 mph",
+          "manufacturer": "Arrow Dynamics",
+          "year": 1991,
+          "inversions": 0,
+          "drop_height": "42 feet",
+          "angle_of_descent": "50 degrees"
+        },
+        {
+          "name": "Backlot Stunt Coaster",
+          "type": "Launched coaster",
+          "height": "42 feet",
+          "length": "1,960 feet",
+          "speed": "40 mph",
+          "manufacturer": "Premier Rides",
+          "year": 2005,
+          "inversions": 0,
+          "drop_height": "39 feet",
+          "angle_of_descent": "55 degrees"
+        },
+        {
+          "name": "Banshee",
+          "type": "Inverted coaster",
+          "height": "167 feet",
+          "length": "4,124 feet",
+          "speed": "68 mph",
+          "manufacturer": "Bolliger & Mabillard",
+          "year": 2014,
+          "inversions": 7,
+          "drop_height": "150 feet",
+          "angle_of_descent": "65 degrees"
+        },
+        {
+          "name": "Diamondback",
+          "type": "Steel hyper coaster",
+          "height": "230 feet",
+          "length": "5,282 feet",
+          "speed": "80 mph",
+          "manufacturer": "Bolliger & Mabillard",
+          "year": 2009,
+          "inversions": 0,
+          "drop_height": "215 feet",
+          "angle_of_descent": "74 degrees"
+        },
+        {
+          "name": "Flight of Fear",
+          "type": "Launched coaster",
+          "height": "83 feet",
+          "length": "2,705 feet",
+          "speed": "54 mph",
+          "manufacturer": "Premier Rides",
+          "year": 1996,
+          "inversions": 4,
+          "drop_height": "80 feet",
+          "angle_of_descent": "87 degrees"
+        },
+        {
+          "name": "Great Pumpkin Coaster",
+          "type": "Junior coaster",
+          "height": "18 feet",
+          "length": "679 feet",
+          "speed": "16 mph",
+          "manufacturer": "Vekoma",
+          "year": 1992,
+          "inversions": 0,
+          "drop_height": "14 feet",
+          "angle_of_descent": "20 degrees"
+        },
+        {
+          "name": "Invertigo",
+          "type": "Inverted shuttle coaster",
+          "height": "131 feet",
+          "length": "1,233 feet",
+          "speed": "50 mph",
+          "manufacturer": "Vekoma",
+          "year": 1999,
+          "inversions": 3,
+          "drop_height": "109 feet",
+          "angle_of_descent": "88 degrees"
+        },
+        {
+          "name": "Mystic Timbers",
+          "type": "Wooden coaster",
+          "height": "109 feet",
+          "length": "3,265 feet",
+          "speed": "53 mph",
+          "manufacturer": "Great Coasters International",
+          "year": 2017,
+          "inversions": 0,
+          "drop_height": "109 feet",
+          "angle_of_descent": "53 degrees"
+        },
+        {
+          "name": "Orion",
+          "type": "Giga coaster",
+          "height": "287 feet",
+          "length": "5,321 feet",
+          "speed": "91 mph",
+          "manufacturer": "Bolliger & Mabillard",
+          "year": 2020,
+          "inversions": 0,
+          "drop_height": "300 feet",
+          "angle_of_descent": "85 degrees"
+        },
+        {
+          "name": "The Racer",
+          "type": "Wooden racing coaster",
+          "height": "88 feet",
+          "length": "3,415 feet",
+          "speed": "53 mph",
+          "manufacturer": "Philadelphia Toboggan Coasters",
+          "year": 1972,
+          "inversions": 0,
+          "drop_height": "82 feet",
+          "angle_of_descent": "45 degrees"
+        },
+        {
+          "name": "The Beast",
+          "type": "Wooden coaster",
+          "height": "110 feet",
+          "length": "7,359 feet",
+          "speed": "65 mph",
+          "manufacturer": "Kings Island",
+          "year": 1979,
+          "inversions": 0,
+          "drop_height": "135 feet",
+          "angle_of_descent": "45 degrees"
+        },
+        {
+          "name": "The Bat",
+          "type": "Suspended coaster",
+          "height": "87 feet",
+          "length": "2,352 feet",
+          "speed": "51 mph",
+          "manufacturer": "Arrow Dynamics",
+          "year": 1993,
+          "inversions": 0,
+          "drop_height": "82 feet",
+          "angle_of_descent": "45 degrees"
+        }
+      ]
+    }
+  }
+  

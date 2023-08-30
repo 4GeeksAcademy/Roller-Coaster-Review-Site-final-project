@@ -6,7 +6,7 @@ class User(db.Model):
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Columns(db.String(120))
+    username = db.Column(db.String(120))
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
 
@@ -17,6 +17,9 @@ class User(db.Model):
         return {
             "id": self.id,
             "email": self.email,
+            "username" : self.username,
+            "park_reviews" : [review.serialize() for review in self.park_reviews],
+            "coaster_reviews" : [review.serialize for review in self.coaster_reviews]
             # do not serialize the password, its a security breach
         }
 
@@ -24,7 +27,7 @@ class Park(db.Model):
     __tablename__ = 'park'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Columns(db.String(120))
+    name = db.Column(db.String(120))
     location = db.Column(db.String(256))
     year_opened = db.Column(db.Integer)
 
@@ -42,7 +45,7 @@ class Park(db.Model):
         }
     
 
-class ParkReview(db.model):
+class ParkReview(db.Model):
     __tablename__ = 'park_review'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -67,14 +70,16 @@ class ParkReview(db.model):
         return {
             "id" : self.id,
             "user.id" : self.user_id,
-            "coaster_id" : self.coaster_id,
+            "park_id" : self.park_id,
+            "user_name" : self.user.name,
+            "park_name" : self.park.name,
             "score" : self.score,
             "review_text" : self.review_text,
             "likes" : self.likes,
             "dislikes" : self.dislikes
         }
 
-class Coasters(db.Model):
+class Coaster(db.Model):
     __tablename__ = "coaster"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -141,6 +146,7 @@ class CoasterReviews(db.Model):
             "id" : self.id,
             "user.id" : self.user_id,
             "coaster_id" : self.coaster_id,
+            "user_name" : self.user.name,
             "coaster_name": self.coaster.name,
             "score" : self.score,
             "review_text" : self.review_text,
