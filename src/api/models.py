@@ -1,4 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.ext.hybrid import hybrid_property
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
@@ -8,7 +10,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120))
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(80), unique=False, nullable=False)
+    _password = db.Column(db.String(80), unique=False, nullable=False)
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -22,6 +24,17 @@ class User(db.Model):
             "coaster_reviews" : [review.serialize for review in self.coaster_reviews]
             # do not serialize the password, its a security breach
         }
+    
+    @hybrid_property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, password):
+        self._password = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self._password, password)
 
 class Park(db.Model):
     __tablename__ = 'park'
@@ -107,6 +120,7 @@ class Coaster(db.Model):
         return {
             "id" : self.id,
             "name" : self.name,
+            "located_at" : f"{self.park.name} ({self.park.location})",
             "year_opened": self.year_opened,
             "ride_type" : self.ride_type,
             "manufacturer" : self.manufacturer,
