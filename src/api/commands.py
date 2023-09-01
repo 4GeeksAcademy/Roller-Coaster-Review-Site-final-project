@@ -1,6 +1,6 @@
-
+import json
 import click
-from api.models import db, User
+from api.models import db, User, Park, Coaster
 
 """
 In this file, you can add as many commands as you want using the @app.cli.command decorator
@@ -22,13 +22,43 @@ def setup_commands(app):
             user = User()
             user.email = "test_user" + str(x) + "@test.com"
             user.password = "123456"
-            user.is_active = True
+            user.username = f"User {str(x)}"
             db.session.add(user)
             db.session.commit()
             print("User: ", user.email, " created.")
 
         print("All test users created")
 
-    @app.cli.command("insert-test-data")
-    def insert_test_data():
-        pass
+    @app.cli.command("insert-test-park")
+    def insert_test_park():
+        with open("./src/api/test-park-data.json", "rt") as test_data:
+            park = json.load(test_data)["park"]
+
+            db.session.merge(Park(
+                name=park["name"],
+                location=park["location"],
+                year_opened=park["year_opened"]
+            ))
+
+            db.session.commit()
+
+            park_id = Park.query.filter_by(name=park["name"]).first().id
+            print(park_id)
+
+            for coaster in park["coasters"]:
+                db.session.merge(Coaster(
+                    name=coaster["name"],
+                    year_opened=coaster["year"],
+                    park_id=park_id,
+                    ride_type=coaster["type"],
+                    manufacturer=coaster["manufacturer"],
+                    track_length=coaster["length"],
+                    height=coaster["height"],
+                    tallest_drop=coaster["drop_height"],
+                    drop_angle=coaster["angle_of_descent"],
+                    max_speed=coaster["speed"],
+                    inversions=coaster["inversions"]
+                ))
+
+            db.session.commit()
+
