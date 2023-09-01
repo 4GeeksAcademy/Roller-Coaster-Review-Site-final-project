@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 1b5dc1b60b35
+Revision ID: 98b323fc2959
 Revises: 
-Create Date: 2023-08-30 04:10:27.123001
+Create Date: 2023-09-01 18:52:08.725703
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1b5dc1b60b35'
+revision = '98b323fc2959'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,7 +29,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=120), nullable=True),
     sa.Column('email', sa.String(length=120), nullable=False),
-    sa.Column('password', sa.String(length=80), nullable=False),
+    sa.Column('_password', sa.String(length=256), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
     )
@@ -55,8 +55,8 @@ def upgrade():
     sa.Column('park_id', sa.Integer(), nullable=True),
     sa.Column('review_text', sa.Text(), nullable=True),
     sa.Column('score', sa.Integer(), nullable=True),
-    sa.Column('likes', sa.Integer(), nullable=True),
-    sa.Column('dislikes', sa.Integer(), nullable=True),
+    sa.Column('likes', sa.Integer(), nullable=False),
+    sa.Column('dislikes', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['park_id'], ['park.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -67,8 +67,8 @@ def upgrade():
     sa.Column('coaster_id', sa.Integer(), nullable=True),
     sa.Column('review_text', sa.Text(), nullable=True),
     sa.Column('score', sa.Integer(), nullable=True),
-    sa.Column('likes', sa.Integer(), nullable=True),
-    sa.Column('dislikes', sa.Integer(), nullable=True),
+    sa.Column('likes', sa.Integer(), nullable=False),
+    sa.Column('dislikes', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['coaster_id'], ['coaster.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
