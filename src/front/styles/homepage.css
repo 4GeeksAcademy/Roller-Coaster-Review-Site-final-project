@@ -1,0 +1,58 @@
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 24px;
+    padding-left: 20px
+}
+
+.nav-link {
+    margin-right: 20px;
+    font-size: 18px;
+    padding-right: 20px;
+}
+
+.navbar-nav .nav-item:last-child .nav-link {
+    margin-right: 0;
+}
+
+.navbar {
+    padding-right: 20px;
+}
+
+.navbar-collapse {
+    justify-content: flex-end
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.fab.fa-github {
+    font-size: 30px;
+    color: black !important;
+}
+
+.footer a {
+    margin-right: 15px;
+    font-size: 18px;
+}
+
+.footer a:last-child {
+    margin-right: 0;
+}
+
+.btn-primary, .btn-secondary {
+    font-size: 20px;
+    padding: 12px 30px;
+}
+
+.footer .text-right {
+    text-align: right !important;
+}
+
+.footer .col-lg-6,
+.footer .col-md-12 {
+    flex: 1;
+}
