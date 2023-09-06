@@ -1,3 +1,22 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+.container{
+    margin-left: 250px;
+    padding: 100px;
+    
+}
+.bottom-container{
+    margin-right: 200px;
+}
+#img{
+    width: 450px;
+    height: 275px;
+    border-radius: 3%;
+}
+.coaster-picture{
+    padding-left: 100px;
+}
+#star{
+    float: right;
+}
