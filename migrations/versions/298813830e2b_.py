@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 98b323fc2959
+Revision ID: 298813830e2b
 Revises: 
-Create Date: 2023-09-01 18:52:08.725703
+Create Date: 2023-09-06 02:41:34.852578
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '98b323fc2959'
+revision = '298813830e2b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,6 +23,7 @@ def upgrade():
     sa.Column('name', sa.String(length=120), nullable=True),
     sa.Column('location', sa.String(length=256), nullable=True),
     sa.Column('year_opened', sa.Integer(), nullable=True),
+    sa.Column('image_url', sa.String(length=256), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user',
@@ -30,6 +31,7 @@ def upgrade():
     sa.Column('username', sa.String(length=120), nullable=True),
     sa.Column('email', sa.String(length=120), nullable=False),
     sa.Column('_password', sa.String(length=256), nullable=False),
+    sa.Column('profile_pic', sa.String(length=256), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
     )
@@ -46,6 +48,7 @@ def upgrade():
     sa.Column('drop_angle', sa.String(length=120), nullable=True),
     sa.Column('max_speed', sa.String(length=120), nullable=True),
     sa.Column('inversions', sa.Integer(), nullable=True),
+    sa.Column('image_url', sa.String(length=256), nullable=True),
     sa.ForeignKeyConstraint(['park_id'], ['park.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
