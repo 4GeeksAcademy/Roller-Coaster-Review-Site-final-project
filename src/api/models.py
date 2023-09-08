@@ -144,7 +144,8 @@ class Coaster(db.Model):
         return {
             "id" : self.id,
             "name" : self.name,
-            "located_at" : f"{self.park.name} ({self.park.location})",
+            "park_name" : self.park.name,
+            "location" : self.park.location,
             "park_id" : self.park_id,
             "year_opened": self.year_opened,
             "ride_type" : self.ride_type,
