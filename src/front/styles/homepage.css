@@ -23,11 +23,11 @@
     justify-content: flex-end
 }
 
-.footer {
+/* .footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-}
+} */
 
 .fab.fa-github {
     font-size: 30px;
