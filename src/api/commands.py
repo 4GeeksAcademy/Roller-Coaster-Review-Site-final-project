@@ -48,15 +48,15 @@ def setup_commands(app):
             for coaster in park["coasters"]:
                 db.session.merge(Coaster(
                     name=coaster["name"],
-                    year_opened=coaster["year"],
+                    year_opened=coaster["year_opened"],
                     park_id=park_id,
-                    ride_type=coaster["type"],
+                    ride_type=coaster["ride_type"],
                     manufacturer=coaster["manufacturer"],
-                    track_length=coaster["length"],
+                    track_length=coaster["track_length"],
                     height=coaster["height"],
-                    tallest_drop=coaster["drop_height"],
-                    drop_angle=coaster["angle_of_descent"],
-                    max_speed=coaster["speed"],
+                    tallest_drop=coaster["tallest_drop"],
+                    drop_angle=coaster["drop_angle"],
+                    max_speed=coaster["max_speed"],
                     inversions=coaster["inversions"]
                 ))
 

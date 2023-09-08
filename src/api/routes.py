@@ -31,7 +31,8 @@ def add_park():
     Konnor's Note: I used ChatGPT to generate this JSON File. If you do it that way, make sure to check for any typos
     and that it is formated correctly based on the below example.
 
-    POST {
+    POST 
+    {
         "park": {
             "name": "Kings Island",         <-- string
             "location": "Mason, Ohio, USA", <-- string
@@ -55,22 +56,18 @@ def add_park():
     }
     '''
     park = request.json['park']
-    #print(post_req)
 
-    parks_with_same_name = Park.query.filter_by(name=park['name']).all()
-    if len(parks_with_same_name) > 0:
-        print("We have a similarly named park in our db. Let's see if it's the same one.")
-        for park in parks_with_same_name:
-            if park.serialize()['location'] == park['location']:
-                return jsonify("This park is already in the database"), 400
-
+    the_same_park = Park.query.filter_by(name=park['name'], location=park["location"]).first()
+    if the_same_park:
+        return jsonify("This park is already in our database"), 400
+        
     db.session.merge(Park(
         name=park['name'],
         location=park['location'],
         year_opened=park['year_opened']
     ))
     db.session.commit()
-    park_id = Park.query.filter_by(name=park["name"]).first().id
+    park_id = Park.query.filter_by(name=park["name"], location=park["location"]).first().id
 
     for coaster in park['coasters']:
         db.session.merge(Coaster(
@@ -110,7 +107,8 @@ def add_coaster_to_park():
     Konnor's Note: I used ChatGPT to generate this JSON File. If you do it that way, make sure to check for any typos
     and that it is formated correctly based on the below example.
 
-    POST {
+    POST 
+    {
         "roller_coaster": {
             "name": "Ricochet",                             <-- string
             "park_name": "Carowinds",                       <-- string
@@ -128,7 +126,6 @@ def add_coaster_to_park():
     }
     '''
     coaster = request.json["roller_coaster"]
-    #print(coaster)
 
     park = Park.query.filter_by(name=coaster["park_name"], location=coaster["location"]).first()
     if not park:
@@ -136,16 +133,16 @@ def add_coaster_to_park():
     
     db.session.merge(Coaster(
         name=coaster["name"],
-            year_opened=coaster["year_opened"],
-            park_id=park.id,
-            ride_type=coaster["ride_type"],
-            manufacturer=coaster["manufacturer"],
-            track_length=coaster["track_length"],
-            height=coaster["height"],
-            tallest_drop=coaster["tallest_drop"],
-            drop_angle=coaster["drop_angle"],
-            max_speed=coaster["max_speed"],
-            inversions=coaster["inversions"]
+        year_opened=coaster["year_opened"],
+        park_id=park.id,
+        ride_type=coaster["ride_type"],
+        manufacturer=coaster["manufacturer"],
+        track_length=coaster["track_length"],
+        height=coaster["height"],
+        tallest_drop=coaster["tallest_drop"],
+        drop_angle=coaster["drop_angle"],
+        max_speed=coaster["max_speed"],
+        inversions=coaster["inversions"]
     ))
 
     db.session.commit()
