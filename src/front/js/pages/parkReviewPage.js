@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-function CoasterReview() {
-    const {coasterID} = useParams()
-    const [coaster, setCoaster] = useState({})
+function ParkReview() {
+    const {parkID} = useParams()
+    const [park, setPark] = useState({})
     const [selectedScore, setSelectedScore] = useState(0)
     const [writtenReview, setWrittenReview] = useState("")
 
-    useEffect(() => {getCoaster()}, [coasterID])
+    useEffect(() => {getCoaster()}, [parkID])
 
-    const url = `${process.env.BACKEND_URL}api/coasters/${coasterID}`
+    const url = `${process.env.BACKEND_URL}api/parks/${parkID}`
 
     const getCoaster = () => {
-        if (Object.keys(coaster).length > 0) setCoaster({})
+        if (Object.keys(park).length > 0) setPark({})
         fetch(url, {method: 'GET'})
         .then(response => response.json())
-        .then(coaster => setCoaster(coaster))
+        .then(park => setPark(park))
     }
 
     const postReview = () => {
         if (selectedScore && writtenReview) {
-            fetch(`${process.env.BACKEND_URL}api/review/coaster/${coasterID}`, {
+            fetch(`${process.env.BACKEND_URL}api/review/park/${parkID}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ function CoasterReview() {
 
     return (
         <div className="container">
-            <h2 className="mt-4">Write your review for {coaster["name"]}</h2>
+            <h2 className="mt-4">Write your review for {park["name"]}</h2>
             <div className="mt-5">
                 <label className="form-label">
                     <h4>Score:</h4>
@@ -81,4 +81,4 @@ function CoasterReview() {
         </div>
     )
 }
-export default CoasterReview
+export default ParkReview

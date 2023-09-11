@@ -6,6 +6,8 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from api.models import db, User, Park, Coaster, ParkReview, CoasterReviews
 from api.utils import generate_sitemap, APIException
 
+import random
+
 api = Blueprint('api', __name__)
 
 
@@ -202,7 +204,7 @@ def get_coaster(id):
     return jsonify(coaster.serialize()), 200
 
 @api.route('/review/park/<int:id>', methods=['POST'])
-@jwt_required()
+#@jwt_required()
 def add_park_review(id):
     '''
     POST
@@ -212,15 +214,17 @@ def add_park_review(id):
     }
     '''
     review = request.json
-    user = User.query.filter_by(email=get_jwt_identity()).first()
+    #user = User.query.filter_by(email=get_jwt_identity()).first()
+
+    num_of_users = len(User.query.all())
 
     park = Park.query.filter_by(id=id).first()
     if not park:
         return jsonify("This park is not in our database"), 400
 
-    user_review_of_same_park = ParkReview.query.filter_by(user_id=user.id, park_id=id).first()
-    if user_review_of_same_park:
-        return jsonify("You've already written review of this park. You can only review a park once!"), 400
+    #user_review_of_same_park = ParkReview.query.filter_by(user_id=user.id, park_id=id).first()
+    #if user_review_of_same_park:
+    #    return jsonify("You've already written review of this park. You can only review a park once!"), 400
 
     if review["score"] < 1 or review["score"] > 10:
         return jsonify('This score is not valid, it must be between 1 and 10'), 400
@@ -228,7 +232,7 @@ def add_park_review(id):
         return jsonify("You need to actually right a review. Not just put a score and leave"), 400
 
     db.session.merge(ParkReview(
-        user_id=user.id,
+        user_id=random.randint(1, num_of_users),
         park_id=id,
         score=review["score"],
         review_text=review["review_text"]
@@ -239,7 +243,7 @@ def add_park_review(id):
     return '', 204
 
 @api.route('/review/coaster/<int:id>', methods=['POST'])
-@jwt_required()
+#@jwt_required()
 def add_coaster_review(id):
     '''
     POST
@@ -249,15 +253,17 @@ def add_coaster_review(id):
     }
     '''
     review = request.json
-    user = User.query.filter_by(email=get_jwt_identity()).first()
+    #user = User.query.filter_by(email=get_jwt_identity()).first()
+
+    num_of_users = len(User.query.all())
 
     coaster = Coaster.query.filter_by(id=id).first()
     if not coaster:
         return jsonify('This coaster is not in our database.'), 400
     
-    user_review_of_same_coaster = CoasterReviews.query.filter_by(user_id=user.id, coaster_id=id).first()
-    if user_review_of_same_coaster:
-        return jsonify("You've already written review of this coaster. You can only review a coaster once!"), 400
+    #user_review_of_same_coaster = CoasterReviews.query.filter_by(user_id=user.id, coaster_id=id).first()
+    #if user_review_of_same_coaster:
+    #    return jsonify("You've already written review of this coaster. You can only review a coaster once!"), 400
 
     if review["score"] < 1 or review["score"] > 10:
         return jsonify('This score is not valid, it must be between 1 and 10'), 400
@@ -265,7 +271,7 @@ def add_coaster_review(id):
         return jsonify("You need to actually right a review. Not just put a score and leave"), 400
     
     db.session.merge(CoasterReviews(
-        user_id=user.id,
+        user_id=random.randint(1, num_of_users),
         coaster_id=id,
         score=review["score"],
         review_text=review["review_text"]

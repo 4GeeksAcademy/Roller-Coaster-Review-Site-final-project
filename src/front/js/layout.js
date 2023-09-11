@@ -12,6 +12,7 @@ import { UserProfile } from "./pages/userprofile";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import CoasterReview from "./pages/coasterReviewPage";
+import ParkReview from "./pages/parkReviewPage";
 
 //create your first component
 const Layout = () => {
@@ -29,7 +30,8 @@ const Layout = () => {
                     <Routes>
                         <Route element={<Home />} path="/" />
                         <Route element={<Demo />} path="/demo" />
-                        <Route element={<CoasterReview />} path="/review/:coasterID" />
+                        <Route element={<CoasterReview />} path="/review/coaster/:coasterID" />
+                        <Route element={<ParkReview />} path="/review/park/:parkID" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
                         <Route element={<UserProfile />} path="/UserProfile" />
