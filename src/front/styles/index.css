@@ -10,14 +10,14 @@
 
 }
 .bottom-container{
-    width: 80%;
+    width: 70%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 #img{
-    width: 450px;
-    height: 275px;
+    width: 500px;
+    height: 400px;
     border-radius: 3%;
 }
 .coaster-picture{
@@ -41,4 +41,10 @@
 }
 .rating-num{
     font-size: 20px;
+}
+.coaster-stats li{
+    list-style-type: none;
+}
+.review-rating h5{
+    margin-top: -10px;
 }
