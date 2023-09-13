@@ -23,12 +23,6 @@
     justify-content: flex-end
 }
 
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-}
-
 .fab.fa-github {
     font-size: 30px;
     color: black !important;
@@ -54,5 +48,24 @@
 
 .footer .col-lg-6,
 .footer .col-md-12 {
+    flex: 1;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Main content adjustments */
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-bottom: 60px; /* Approximate height of the footer, can be adjusted if needed */
+}
+  
+.flex-content {
     flex: 1;
 }
