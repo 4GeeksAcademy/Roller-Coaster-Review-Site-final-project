@@ -33,6 +33,7 @@ def signup():
     user = User.query.filter_by(email=data.get("email", None)).first()
 
     if user:
+        print("the user exists")
         return jsonify(message="This user already exists. Get outta here!"), 400
     
     user = User(
