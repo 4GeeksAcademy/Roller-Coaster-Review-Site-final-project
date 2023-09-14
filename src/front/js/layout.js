@@ -14,7 +14,7 @@ import { Footer } from "./component/footer";
 import Review from "./pages/review";
 import { Signup } from "./component/signup";
 import  Login  from "./component/login";
-
+import Coaster from "./pages/coaster";
 
 //create your first component
 const Layout = () => {
@@ -33,6 +33,7 @@ const Layout = () => {
                     <Navbar />
                     <Routes>
                         <Route element={<Home adjustFooterHeight={setFixFooter} />} path="/" />
+                        <Route element={<Coaster />} path="/coaster" />
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Review />} path="/review"/>
                         <Route element={<Single />} path="/single/:theid" />
