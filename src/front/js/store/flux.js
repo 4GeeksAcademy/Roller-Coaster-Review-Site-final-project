@@ -32,7 +32,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				};
 				try {
 					console.log(process.env.BACKEND_URL + "/signup");
-					const result = await fetch(process.env.BACKEND_URL + "/signup", opts)
+					const result = await fetch(process.env.BACKEND_URL + "api/signup", opts)
 					//const data = await result.json() // unexpected end of JSON is coming from here.
 					//setStore({ user: data })
 					console.log(result);
@@ -79,7 +79,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						password: password,
 					}),
 				};
-				const res = await fetch(process.env.BACKEND_URL + "/login", opts);
+				const res = await fetch(process.env.BACKEND_URL + "api/login", opts);
 				if (res.status < 200 || res.status >= 300) {
 					throw new Error("There was an error signing in");
 				}
