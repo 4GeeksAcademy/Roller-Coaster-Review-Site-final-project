@@ -8,6 +8,7 @@ import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 import {UserProfile} from "./pages/userprofile";
+import {Park} from "./pages/park";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
@@ -38,6 +39,7 @@ const Layout = () => {
                         <Route element={<Review />} path="/review"/>
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
+                        <Route element={<Park />} path="/park" />
                         <Route element={<UserProfile/>} path="/UserProfile" />
                         <Route element={<Signup adjustFooterHeight={setFixFooter}/>} path="/signup"/>
                         <Route element={<Login adjustFooterHeight={setFixFooter}/>} path="/login"/>
