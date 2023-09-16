@@ -18,7 +18,6 @@ export const UserProfile = () => {
                 </div>
             </div>
 
-
             <div className="review-container">
                 <h3>User Reviews:</h3>
             </div>
