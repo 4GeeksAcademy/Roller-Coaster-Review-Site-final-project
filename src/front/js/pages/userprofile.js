@@ -1,10 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
+
 
 <script src="https://kit.fontawesome.com/95543ac58e.js" crossorigin="anonymous"></script>
 
 export const UserProfile = () => {
     const { store, actions } = useContext(Context);
+
+   	
 
     return (
         <div className="container">
