@@ -1,8 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Context } from "../store/appContext";
+import { useParams, useNavigate } from "react-router-dom";
 
-function ParkReview() {
+function ParkReview({adjustFooterHeight}) {
+    function declareHeight(){
+		adjustFooterHeight(true)
+	}
+	useEffect(declareHeight,[])
+
     const {parkID} = useParams()
+    const {store, actions} = useContext(Context)
+    const navigate = useNavigate();
+    
     const [park, setPark] = useState({})
     const [selectedScore, setSelectedScore] = useState(0)
     const [writtenReview, setWrittenReview] = useState("")
@@ -23,6 +32,7 @@ function ParkReview() {
             fetch(`${process.env.BACKEND_URL}api/review/park/${parkID}`, {
                 method: 'POST',
                 headers: {
+                    Authorization: `Bearer ${store.token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -30,12 +40,16 @@ function ParkReview() {
                     review_text: writtenReview
                 })
             })
-            .then(resp => resp.json())
+            .then(resp => {
+                if (resp.ok) navigate("/userprofile")
+            })
         }
         else return console.log("You either didn't score it or didn't right a review");
     }
 
     const scores = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+    console.log("Token:", store.token)
 
     return (
         <div className="container">

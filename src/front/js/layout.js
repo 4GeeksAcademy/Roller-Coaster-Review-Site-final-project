@@ -34,8 +34,8 @@ const Layout = () => {
                         <Route element={<Home adjustFooterHeight={setFixFooter} />} path="/" />
                         <Route element={<Coaster />} path="/coaster" />
                         <Route element={<Demo />} path="/demo" />
-                        <Route element={<CoasterReview />} path="/review/coaster/:coasterID" />
-                        <Route element={<ParkReview />} path="/review/park/:parkID" />
+                        <Route element={<CoasterReview adjustFooterHeight={setFixFooter} />} path="/review/coaster/:coasterID" />
+                        <Route element={<ParkReview adjustFooterHeight={setFixFooter} />} path="/review/park/:parkID" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
                         <Route element={<UserProfile/>} path="/UserProfile" />

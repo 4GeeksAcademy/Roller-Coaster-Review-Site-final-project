@@ -1,8 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Context } from "../store/appContext";
+import { useParams, useNavigate } from "react-router-dom";
 
-function CoasterReview() {
+function CoasterReview({adjustFooterHeight}) {
+    function declareHeight(){
+		adjustFooterHeight(true)
+	}
+	useEffect(declareHeight,[])
+
     const {coasterID} = useParams()
+    const {store, actions} = useContext(Context)
+    const navigate = useNavigate();
+
     const [coaster, setCoaster] = useState({})
     const [selectedScore, setSelectedScore] = useState(0)
     const [writtenReview, setWrittenReview] = useState("")
@@ -23,6 +32,7 @@ function CoasterReview() {
             fetch(`${process.env.BACKEND_URL}api/review/coaster/${coasterID}`, {
                 method: 'POST',
                 headers: {
+                    Authorization: `Bearer ${store.token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -30,7 +40,9 @@ function CoasterReview() {
                     review_text: writtenReview
                 })
             })
-            .then(resp => resp.json())
+            .then(resp => {
+                if (resp.ok) navigate("/userprofile")
+            })
         }
         else return console.log("You either didn't score it or didn't right a review");
     }
