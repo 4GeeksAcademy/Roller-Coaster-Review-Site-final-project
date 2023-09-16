@@ -3,7 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from api.models import db, User, Park, Coaster
+from api.models import PasswordReset, db, User, Park, Coaster, PasswordReset
 from api.utils import generate_sitemap, APIException
 
 api = Blueprint('api', __name__)
@@ -201,3 +201,26 @@ def get_coaster(id):
     coaster = Coaster.query.filter_by(id=id).first()
 
     return jsonify(coaster.serialize()), 200
+
+
+@api.route("/reset_password", methods=['POST'])
+def send_reset_email():
+    """
+    {
+       "user_id" : 1 
+    }
+    RESPONSE: 204, NO CONTENT
+    """
+
+    data = request. json
+    user = User.query. filter_by(id=data.get ("user_id")) .first ()
+    reset = PasswordReset(user=user)
+    db.session.merge (reset)
+    db.session.commit ()
+    reset = PasswordReset. query. filter_by (
+    user=user
+    ).order_by(
+        db.desc (PasswordReset.created)
+    ).first ()
+    return "", 204
+    

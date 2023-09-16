@@ -1,3 +1,4 @@
+import random
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -195,3 +196,35 @@ class CoasterReviews(db.Model):
             "likes" : self.likes,
             "dislikes" : self.dislikes
         }
+    
+import random
+import string
+class PasswordReset(db.Model):
+    def __init__(self):
+        self.users = {}  # A dictionary to store user information
+
+    def create_user(self, username, password):
+        # In a real application, you would hash and salt the password before storing it.
+        self.users[username] = {'password': password, 'reset_token': None}
+
+    def reset_password_request(self, username):
+        # Generate a random reset token
+        reset_token = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+
+        # Store the reset token in the user's profile (In a database in a real application)
+        if username in self.users:
+            self.users[username]['reset_token'] = reset_token
+            return reset_token
+        else:
+            return None
+
+    def reset_password(self, username, reset_token, new_password):
+        # Check if the reset token matches the one stored for the user
+        if username in self.users and 'reset_token' in self.users[username] and self.users[username]['reset_token'] == reset_token:
+            # Update the user's password
+            self.users[username]['password'] = new_password
+            # Clear the reset token
+            self.users[username]['reset_token'] = None
+            return True
+        else:
+            return False
