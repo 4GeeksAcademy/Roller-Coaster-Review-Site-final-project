@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
@@ -13,12 +13,17 @@ import {Park} from "./pages/park";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import Review from "./pages/review";
+import { Signup } from "./component/signup";
+import  Login  from "./component/login";
+import Coaster from "./pages/coaster";
 
 //create your first component
 const Layout = () => {
     //the basename is used when your project is published in a subdirectory and not in the root of the domain
     // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     const basename = process.env.BASENAME || "";
+    const [fixFooter, setFixFooter] = useState(false)
+    
 
     if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
 
@@ -28,15 +33,18 @@ const Layout = () => {
                 <ScrollToTop>
                     <Navbar />
                     <Routes>
-                        <Route element={<Home />} path="/" />
+                        <Route element={<Home adjustFooterHeight={setFixFooter} />} path="/" />
+                        <Route element={<Coaster />} path="/coaster" />
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Review />} path="/review"/>
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
-                        <Route element={<UserProfile />} path="/UserProfile" />
                         <Route element={<Park />} path="/park" />
+                        <Route element={<UserProfile/>} path="/UserProfile" />
+                        <Route element={<Signup adjustFooterHeight={setFixFooter}/>} path="/signup"/>
+                        <Route element={<Login adjustFooterHeight={setFixFooter}/>} path="/login"/>
                     </Routes>
-                    <Footer />
+                    <Footer adjustHeight={fixFooter}/>
                 </ScrollToTop>
             </BrowserRouter>
         </div>
