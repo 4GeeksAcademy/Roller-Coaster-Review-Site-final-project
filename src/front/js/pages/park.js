@@ -37,7 +37,7 @@ export const Park = () => {
               </tbody>
             </table>
           </div>
-          <div className="reviews-div container mt-3 mb-5 pt-2 pb-2">
+          <div className="reviews-div container mt-3 mb-5 pt-3 pb-2">
             <div className="d-flex justify-content-between align-items-center">
               <h3>Reviews</h3>
               <button className="btn btn-success">Write Review</button>
