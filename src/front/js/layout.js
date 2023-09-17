@@ -16,6 +16,7 @@ import Review from "./pages/review";
 import { Signup } from "./component/signup";
 import  Login  from "./component/login";
 import Coaster from "./pages/coaster";
+import SearchPage from "./pages/search";
 
 //create your first component
 const Layout = () => {
@@ -32,11 +33,12 @@ const Layout = () => {
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
                     <Navbar />
-                    <Routes>
+                    <Routes>                      
                         <Route element={<Home adjustFooterHeight={setFixFooter} />} path="/" />
-                        <Route element={<Coaster />} path="/coaster" />
+                        <Route element={<Coaster />} path="/coaster/:coasterID" />
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Review />} path="/review"/>
+                        <Route element={<SearchPage />} path="/search"/>
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
                         <Route element={<Park />} path="/park" />
