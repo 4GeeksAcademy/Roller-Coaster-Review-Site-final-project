@@ -7,12 +7,14 @@ import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
+
 import {UserProfile} from "./pages/userprofile";
 import {Park} from "./pages/park";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
-import Review from "./pages/review";
+import CoasterReview from "./pages/coasterReviewPage";
+import ParkReview from "./pages/parkReviewPage";
 import { Signup } from "./component/signup";
 import  Login  from "./component/login";
 import Coaster from "./pages/coaster";
@@ -24,9 +26,7 @@ const Layout = () => {
     // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     const basename = process.env.BASENAME || "";
     const [fixFooter, setFixFooter] = useState(false)
-    
-
-    if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
+    if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
         <div>
@@ -37,7 +37,8 @@ const Layout = () => {
                         <Route element={<Home adjustFooterHeight={setFixFooter} />} path="/" />
                         <Route element={<Coaster />} path="/coaster/:coasterID" />
                         <Route element={<Demo />} path="/demo" />
-                        <Route element={<Review />} path="/review"/>
+                        <Route element={<CoasterReview adjustFooterHeight={setFixFooter} />} path="/review/coaster/:coasterID" />
+                        <Route element={<ParkReview adjustFooterHeight={setFixFooter} />} path="/review/park/:parkID" />
                         <Route element={<SearchPage />} path="/search"/>
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
