@@ -23,11 +23,12 @@
     justify-content: flex-end
 }
 
-/* .footer {
-    position: absolute;
+
+.footer {
+    /* position: fixed; */
     bottom: 0;
     width: 100%;
-} */
+}
 
 .fab.fa-github {
     font-size: 30px;
@@ -55,4 +56,8 @@
 .footer .col-lg-6,
 .footer .col-md-12 {
     flex: 1;
+}
+
+.reviews-div {
+    background-color: white;
 }
