@@ -7,7 +7,9 @@ import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
-import { UserProfile } from "./pages/userprofile";
+
+import {UserProfile} from "./pages/userprofile";
+import {Park} from "./pages/park";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
@@ -16,6 +18,7 @@ import ParkReview from "./pages/parkReviewPage";
 import { Signup } from "./component/signup";
 import  Login  from "./component/login";
 import Coaster from "./pages/coaster";
+import SearchPage from "./pages/search";
 
 //create your first component
 const Layout = () => {
@@ -30,14 +33,16 @@ const Layout = () => {
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
                     <Navbar />
-                    <Routes>
+                    <Routes>                      
                         <Route element={<Home adjustFooterHeight={setFixFooter} />} path="/" />
-                        <Route element={<Coaster />} path="/coaster" />
+                        <Route element={<Coaster />} path="/coaster/:coasterID" />
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<CoasterReview adjustFooterHeight={setFixFooter} />} path="/review/coaster/:coasterID" />
                         <Route element={<ParkReview adjustFooterHeight={setFixFooter} />} path="/review/park/:parkID" />
+                        <Route element={<SearchPage />} path="/search"/>
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
+                        <Route element={<Park />} path="/park" />
                         <Route element={<UserProfile/>} path="/UserProfile" />
                         <Route element={<Signup adjustFooterHeight={setFixFooter}/>} path="/signup"/>
                         <Route element={<Login adjustFooterHeight={setFixFooter}/>} path="/login"/>
