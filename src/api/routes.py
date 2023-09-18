@@ -3,6 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import requests
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
 import string
 import random
 from collections import UserString
@@ -11,6 +12,9 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from api.models import PasswordReset, db, User, Park, Coaster, PasswordReset
 from api.utils import generate_sitemap, APIException
+
+
+
 
 api = Blueprint('api', __name__)
 
@@ -213,27 +217,11 @@ def add_coaster_to_park():
     return '', 204
 
 
-app = Flask(__name__)
-app.secret_key = "your_secret_key"
 
-
-users = {
-    "user1@example.com": {"password": "password1"},
-    "user2@example.com": {"password": "password2"},
-}
-
-MAILGUN_API_KEY = 'b1cddc02ef22f5d75e78a9528ef34fd7-413e373c-32d5102e'
-MAILGUN_DOMAIN = 'YOUR_DOMAIN'
-
-
-def generate_temp_password(length=8):
-    characters = string.ascii_letters + string.digits
-    return ''.join(random.choice(characters) for _ in range(length))
-
-
+# Function send temporary password email with Mailgun
 def send_temp_password_email(email, temp_password):
-    url = f'https://api.mailgun.net/v3/{MAILGUN_DOMAIN}/messages'
-    auth = ('api', MAILGUN_API_KEY)
+    url = f'https://api.mailgun.net/v3/sandboxae4a6d32d26d4ca194565f026827cd79/messages'
+    auth = ('api', '413e373c-32d5102e')  
     data = {
         'from': 'Your App <noreply@yourapp.com>',
         'to': email,
@@ -242,28 +230,3 @@ def send_temp_password_email(email, temp_password):
     }
     response = requests.post(url, auth=auth, data=data)
     return response.status_code == 200
-
-# Route for the password reset API endpoint
-
-
-@app.route('/api/reset_password', methods=['POST'])
-def api_reset_password():
-    data = request.get_json()
-    if data and "email" in data:
-        email = data["email"]
-        if email in users:
-            temp_password = generate_temp_password()
-            users[email]["password"] = temp_password
-            if send_temp_password_email(email, temp_password):
-                return jsonify({"success": True, "message": "Password reset successful. Check your email for the temporary password."})
-            else:
-                return jsonify({"success": False, "message": "Failed to send the email."})
-        else:
-            return jsonify({"success": False, "message": "Email not found. Password reset failed."})
-    return jsonify({"success": False, "message": "Invalid data."})
-
-# ... (other routes)
-
-
-if __name__ == "__main__":
-    app.run(debug=True)

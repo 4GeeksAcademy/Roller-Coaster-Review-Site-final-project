@@ -19,6 +19,7 @@ function ResetPassword() {
     }
   };
 
+
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -26,17 +27,17 @@ function ResetPassword() {
           <div className="card">
             <div className="card-body">
               <h1 className="card-title text-center mb-4">Password Reset</h1>
-              {/* Add the 'id' attribute to the form element */}
-              <form id="passwordResetForm" onSubmit={handleResetPassword}>
+              <form onSubmit={handleResetPassword}>
                 <div className="form-group">
-                  <label>Email:</label>
-                  <input
+                  <label>Email: </label>
+                    <input
                     type="email"
                     className="form-control"
                     value={email}
                     onChange={handleEmailChange}
                     required
-                  />
+                    />
+                 
                 </div>
                 <div className="text-center">
                   <button
