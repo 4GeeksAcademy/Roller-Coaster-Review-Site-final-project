@@ -17,6 +17,28 @@ export const Park = () => {
     .then(park => setPark(park))
   }
 
+  const [parkTemp, setParkTemp] = useState('')
+  const getParkWeather = (parkName) => {
+    if (!park) return null
+    const parkList = fetch(`https://api.themeparks.wiki/v1/destinations`, {method: 'GET'}).then(resp => resp.json())
+    
+    const coordinates = parkList.then(parks => {
+      for (const dest of parks["destinations"]) {
+        if (dest["name"] === parkName) {
+          return fetch(`https://api.themeparks.wiki/v1/entity/${dest["slug"]}`)
+        }
+      }
+    }).then(resp => resp.json()).then(thispark => thispark["location"])
+
+    const findWeather = coordinates.then(loc => {
+      console.log(loc["latitude"], loc["longitude"])
+      return fetch(`https://api.open-meteo.com/v1/forecast?latitude=${loc["latitude"]}&longitude=${loc["longitude"]}&current_weather=true&timezone=auto&temperature_unit=fahrenheit`, {method: 'GET'})
+    }).then(resp => resp.json())
+    findWeather.then(weather => setParkTemp(weather["current_weather"]["temperature"]))
+    .catch(error => console.error(error))
+  }
+  useEffect(() => {getParkWeather(park.name)}, [park])
+
   console.log(park)
   return (
       <div className="flex-container d-flex flex-column min-vh-100 mb-4">  
@@ -35,6 +57,7 @@ export const Park = () => {
                 <p><i className="fa-solid fa-location-dot px-2 pt-1"></i>{park.location}</p>
                 <p>Year Opened: {park.year_opened}</p>
                 <p>Roller Coasters: {!park.coasters ? "N/A" : park.coasters.length}</p>
+                <p>Weather: {!parkTemp ? "N/A" : `${parkTemp}° F`}</p>
               </div>
             </div>
           </div>

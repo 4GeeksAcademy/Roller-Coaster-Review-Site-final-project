@@ -17,7 +17,6 @@ const SearchPage = () => {
         .then(list => searchMode === "coasters" ? setFetchedList(list.coasters) : setFetchedList(list.parks))
     }
 
-    console.log(fetchedList)
     return (
         <div className='container my-5 min-vh-100 mb-4'>
             <div className='d-flex justify-content-center'>
@@ -39,7 +38,7 @@ const SearchPage = () => {
             </div>
             <div className='accordion mt-5'>
                 {fetchedList.length === 0 ? <div className='accordion-item text-center p-1'><h5>Sorry there is nothing here</h5></div> : ""}
-                {fetchedList.map((item, idx) => {
+                {fetchedList.filter(item => item.name.toLowerCase().includes(inputValue.toLowerCase())).map((item, idx) => {
                     return (
                         <div key={idx} className='accordion-item px-2 py-1 d-flex justify-content-between align-items-center'>
                             <div className='d-flex flex-column'>

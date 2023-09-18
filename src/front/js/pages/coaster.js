@@ -21,6 +21,7 @@ export default function Coaster() {
 
     useEffect(() => {console.log(coaster)}, [coaster])
 
+    console.log("Token: ", store.token)
     return (
         <div className="coaster-container mb-4">
             <div className="top-container d-flex gap-3 justify-content-center">
@@ -67,7 +68,7 @@ export default function Coaster() {
                     <button 
                     className="btn btn-success" 
                     onClick={() => navigate(`/review/coaster/${coasterID}`)}
-                    disabled={!store.token}
+                    disabled={!store.token ? true : false}
                     >Write Review</button>
                 </div>
                 <hr/>
