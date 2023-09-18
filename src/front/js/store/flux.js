@@ -1,3 +1,4 @@
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -16,6 +17,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			],
 			user: null,
 			user_name: null,
+			//cf_url: "https://miniature-space-funicular-jv6qpwrx47jf56jw-3000.app.github.dev",
 			token: sessionStorage.getItem("token")
 		},
 		actions: {
@@ -61,10 +63,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			logout: () => {
-				const cf_url = getStore().cf_url
+				//const cf_url = getStore().cf_url
 				const token = sessionStorage.removeItem("token");
 				setStore({ token: null });
-				window.location.href = cf_url + "/";
+				return new Promise((resolve, reject) => {
+					if (!getStore().token) resolve()
+					else reject()
+				})
 			},
 
 			login: async (email, password) => {
@@ -86,6 +91,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const data = await res.json();
 
 				sessionStorage.setItem("token", data.token);
+				console.log(data.token)
+
 				// data.favorites.forEach(f => {
 				//   //was returning an error bc it didnt like the single quotes so the line below turns the single into double quotes 
 				//   f.item = f.item.replace(/'/g, '"')
@@ -93,7 +100,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				// })
 				console.log("USER INFO HERE", data)
 				setStore({
-					token: data.access_token,
+					token: data.token,
 					// These aren't on the response from the login
 					// So you can either change the backend to send the user data
 					// along with the token, or change this to make a second request for this data.
