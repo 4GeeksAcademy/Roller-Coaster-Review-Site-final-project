@@ -44,6 +44,12 @@ export default function Login({adjustFooterHeight}) {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button type="submit">Login</button>
+
+    <div className="text-right">
+      <button className="btn btn-primary btn-lg" onClick={()=>navigate("/ResetPassword")}>Forgot Password</button>
+     </div>
+     
     </form>
+    
   );
 }

@@ -1,6 +1,12 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+import requests
+from flask import Flask, render_template, request, jsonify
+import string
+import random
+from collections import UserString
+from sys import setprofile
 from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from api.models import PasswordReset, db, User, Park, Coaster, PasswordReset
@@ -17,6 +23,7 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
 
 @api.route('/signup', methods=['POST'])
 def signup():
@@ -35,7 +42,7 @@ def signup():
     if user:
         print("the user exists")
         return jsonify(message="This user already exists. Get outta here!"), 400
-    
+
     user = User(
         email=data["email"],
         password=data["password"],
@@ -44,6 +51,7 @@ def signup():
     db.session.add(user)
     db.session.commit()
     return '', 204
+
 
 @api.route('/login', methods=['POST'])
 def login():
@@ -64,6 +72,7 @@ def login():
     token = create_access_token(user.email)
     return jsonify(token=token), 200
 
+
 @api.route('/parks', methods=['GET'])
 def get_all_parks():
     parks = Park.query.all()
@@ -71,6 +80,7 @@ def get_all_parks():
     return jsonify(
         parks=[park.serialize() for park in parks]
     ), 200
+
 
 @api.route('/parks', methods=['POST'])
 def add_park():
@@ -104,17 +114,19 @@ def add_park():
     '''
     park = request.json['park']
 
-    the_same_park = Park.query.filter_by(name=park['name'], location=park["location"]).first()
+    the_same_park = Park.query.filter_by(
+        name=park['name'], location=park["location"]).first()
     if the_same_park:
         return jsonify("This park is already in our database"), 400
-        
+
     db.session.merge(Park(
         name=park['name'],
         location=park['location'],
         year_opened=park['year_opened']
     ))
     db.session.commit()
-    park_id = Park.query.filter_by(name=park["name"], location=park["location"]).first().id
+    park_id = Park.query.filter_by(
+        name=park["name"], location=park["location"]).first().id
 
     for coaster in park['coasters']:
         db.session.merge(Coaster(
@@ -134,11 +146,13 @@ def add_park():
 
     return jsonify("Park successfully merged!"), 204
 
+
 @api.route('/parks/<int:id>', methods=['GET'])
 def get_park(id):
     park = Park.query.filter_by(id=id).first()
 
     return jsonify(park.serialize()), 200
+
 
 @api.route('/coasters', methods=['GET'])
 def get_all_coasters():
@@ -147,6 +161,7 @@ def get_all_coasters():
     return jsonify(
         coasters=[coaster.serialize() for coaster in coasters]
     ), 200
+
 
 @api.route('/coasters', methods=['POST'])
 def add_coaster_to_park():
@@ -174,10 +189,11 @@ def add_coaster_to_park():
     '''
     coaster = request.json["roller_coaster"]
 
-    park = Park.query.filter_by(name=coaster["park_name"], location=coaster["location"]).first()
+    park = Park.query.filter_by(
+        name=coaster["park_name"], location=coaster["location"]).first()
     if not park:
         return jsonify("The park listed is not in our database. We can't add this coaster to our database."), 400
-    
+
     db.session.merge(Coaster(
         name=coaster["name"],
         year_opened=coaster["year_opened"],
@@ -196,31 +212,58 @@ def add_coaster_to_park():
 
     return '', 204
 
-@api.route('/coasters/<int:id>', methods=['GET'])
-def get_coaster(id):
-    coaster = Coaster.query.filter_by(id=id).first()
 
-    return jsonify(coaster.serialize()), 200
+app = Flask(__name__)
+app.secret_key = "your_secret_key"
 
 
-@api.route("/reset_password", methods=['POST'])
-def send_reset_email():
-    """
-    {
-       "user_id" : 1 
+users = {
+    "user1@example.com": {"password": "password1"},
+    "user2@example.com": {"password": "password2"},
+}
+
+MAILGUN_API_KEY = 'b1cddc02ef22f5d75e78a9528ef34fd7-413e373c-32d5102e'
+MAILGUN_DOMAIN = 'YOUR_DOMAIN'
+
+
+def generate_temp_password(length=8):
+    characters = string.ascii_letters + string.digits
+    return ''.join(random.choice(characters) for _ in range(length))
+
+
+def send_temp_password_email(email, temp_password):
+    url = f'https://api.mailgun.net/v3/{MAILGUN_DOMAIN}/messages'
+    auth = ('api', MAILGUN_API_KEY)
+    data = {
+        'from': 'Your App <noreply@yourapp.com>',
+        'to': email,
+        'subject': 'Password Reset',
+        'text': f'Your temporary password is: {temp_password}',
     }
-    RESPONSE: 204, NO CONTENT
-    """
+    response = requests.post(url, auth=auth, data=data)
+    return response.status_code == 200
 
-    data = request. json
-    user = User.query. filter_by(id=data.get ("user_id")) .first ()
-    reset = PasswordReset(user=user)
-    db.session.merge (reset)
-    db.session.commit ()
-    reset = PasswordReset. query. filter_by (
-    user=user
-    ).order_by(
-        db.desc (PasswordReset.created)
-    ).first ()
-    return "", 204
-    
+# Route for the password reset API endpoint
+
+
+@app.route('/api/reset_password', methods=['POST'])
+def api_reset_password():
+    data = request.get_json()
+    if data and "email" in data:
+        email = data["email"]
+        if email in users:
+            temp_password = generate_temp_password()
+            users[email]["password"] = temp_password
+            if send_temp_password_email(email, temp_password):
+                return jsonify({"success": True, "message": "Password reset successful. Check your email for the temporary password."})
+            else:
+                return jsonify({"success": False, "message": "Failed to send the email."})
+        else:
+            return jsonify({"success": False, "message": "Email not found. Password reset failed."})
+    return jsonify({"success": False, "message": "Invalid data."})
+
+# ... (other routes)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

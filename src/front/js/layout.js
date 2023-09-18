@@ -15,6 +15,8 @@ import Review from "./pages/review";
 import { Signup } from "./component/signup";
 import  Login  from "./component/login";
 import Coaster from "./pages/coaster";
+import ResetPassword from './component/ResetPassword';
+
 
 //create your first component
 const Layout = () => {
@@ -41,6 +43,8 @@ const Layout = () => {
                         <Route element={<UserProfile/>} path="/UserProfile" />
                         <Route element={<Signup adjustFooterHeight={setFixFooter}/>} path="/signup"/>
                         <Route element={<Login adjustFooterHeight={setFixFooter}/>} path="/login"/>
+                        <Route element={<ResetPassword />} path="/ResetPassword" component={ResetPassword} />
+                        
                     </Routes>
                     <Footer adjustHeight={fixFooter}/>
                 </ScrollToTop>
