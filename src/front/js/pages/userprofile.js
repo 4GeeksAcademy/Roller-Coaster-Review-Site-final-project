@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Context } from "../store/appContext";
-import { Park } from "./park";
 
 
 <script src="https://kit.fontawesome.com/95543ac58e.js" crossorigin="anonymous"></script>
@@ -46,7 +45,9 @@ export const UserProfile = () => {
                             <div key={idx} className="mb-3">
                                 <div className="review-top d-flex justify-content-between">
                                     <div>
-                                        <h4 className="mb-0">{review.park_name}</h4>
+                                        <Link to={`/park/${review.park_id}`}>
+                                            <h4 className="mb-0 text-black">{review.park_name}</h4>
+                                        </Link>
                                         <div className="d-flex">
                                             <i className="fa-solid fa-location-dot fa-xs"></i>
                                             <h6>{review.location}</h6>
@@ -77,7 +78,9 @@ export const UserProfile = () => {
                                 <div key={idx}>
                                     <div className="review-top d-flex justify-content-between">
                                         <div>
-                                            <h4 className="mb-0">{review.coaster_name}</h4>
+                                            <Link to={`/coaster/${review.coaster_id}`}>
+                                                <h4 className="mb-0 text-black">{review.coaster_name}</h4>
+                                            </Link>
                                             <div className="d-flex">
                                                 <i className="fa-solid fa-location-dot fa-xs"></i>
                                                 <h6>{review.at_park}</h6>

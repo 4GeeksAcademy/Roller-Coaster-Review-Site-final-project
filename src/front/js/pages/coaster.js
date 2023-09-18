@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from "react";
 import { Context } from "../store/appContext";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 export default function Coaster() {
     const {coasterID} = useParams()
@@ -37,7 +37,9 @@ export default function Coaster() {
                     </div>
                     <div className="coaster-locoation d-flex">
                         <i className="fa-solid fa-location-dot px-2 pt-1"></i>
-                        <p>{coaster.park_name} ({coaster.location})</p>
+                        <Link to={`/park/${coaster.park_id}`}>
+                            <p className="text-black">{coaster.park_name} ({coaster.location})</p>
+                        </Link>
                     </div>
                     <div>
                         <ul className="general-info">
@@ -78,7 +80,9 @@ export default function Coaster() {
                                         <div className="review-user d-flex justify-content-between">
                                             <div className="d-flex">
                                                 <img className="rounded-circle" height="50px" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" />
-                                                <h4 className="mt-1 mx-2">{review.user_name}</h4>
+                                                <Link to={`/userprofile/${review.user_id}`}>
+                                                    <h4 className="mt-1 mx-2 text-black">{review.user_name}</h4>
+                                                </Link>
                                             </div>
                                             <div>
                                                 <i id="star" className="fa-solid fa-star">

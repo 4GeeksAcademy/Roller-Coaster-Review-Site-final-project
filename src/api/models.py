@@ -96,7 +96,7 @@ class ParkReview(db.Model):
     def serialize(self):
         return {
             "id" : self.id,
-            "user.id" : self.user_id,
+            "user_id" : self.user_id,
             "park_id" : self.park_id,
             "username" : self.user.username,
             "park_name" : self.park.name,
@@ -187,7 +187,7 @@ class CoasterReviews(db.Model):
     def serialize(self):
         return {
             "id" : self.id,
-            "user.id" : self.user_id,
+            "user_id" : self.user_id,
             "coaster_id" : self.coaster_id,
             "user_name" : self.user.username,
             "coaster_name": self.coaster.name,
