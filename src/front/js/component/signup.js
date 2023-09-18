@@ -15,6 +15,7 @@ export const Signup = ({adjustFooterHeight}) => {
   const [password, setPassword] = useState("")
   const navigate = useNavigate()
   const token = sessionStorage.getItem("token")
+  
   //e is for event
   useEffect(() => {
     if (store.user != null) {
