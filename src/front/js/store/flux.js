@@ -1,3 +1,4 @@
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -16,7 +17,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			],
 			user: null,
 			user_name: null,
-			cf_url: "https://miniature-space-funicular-jv6qpwrx47jf56jw-3000.app.github.dev",
+			//cf_url: "https://miniature-space-funicular-jv6qpwrx47jf56jw-3000.app.github.dev",
 			token: sessionStorage.getItem("token")
 		},
 		actions: {
@@ -62,10 +63,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			logout: () => {
-				const cf_url = getStore().cf_url
+				//const cf_url = getStore().cf_url
 				const token = sessionStorage.removeItem("token");
 				setStore({ token: null });
-				window.location.href = cf_url + "/";
+				return new Promise((resolve, reject) => {
+					if (!getStore().token) resolve()
+					else reject()
+				})
 			},
 
 			login: async (email, password) => {

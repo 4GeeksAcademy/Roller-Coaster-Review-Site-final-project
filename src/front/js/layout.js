@@ -23,7 +23,7 @@ const Layout = () => {
     const basename = process.env.BASENAME || "";
     const [fixFooter, setFixFooter] = useState(false)
 
-    if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
+    if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
 
     return (
         <div>

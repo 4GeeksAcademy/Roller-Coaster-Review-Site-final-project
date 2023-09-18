@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Context } from "../store/appContext";
 
 export const Navbar = () => {
     const { store, actions } = useContext(Context);
+    const navigate = useNavigate()
 
     return (
         <nav className="navbar navbar-expand-sm navbar-dark bg-primary">
@@ -23,7 +24,7 @@ export const Navbar = () => {
                         <ul className="dropdown-menu dropdown-menu-end">
                             {
                                 store.token && store.token.length > 0 ?
-                                    (<li><span className="dropdown-item" onClick={()=> actions.logout()}>Logout</span></li>)
+                                    (<li><span className="dropdown-item" onClick={()=> actions.logout().then(navigate('/'))}>Logout</span></li>)
                                     : (
                                         <>
                                             <li><Link className="dropdown-item" to="/login">Login</Link></li>
