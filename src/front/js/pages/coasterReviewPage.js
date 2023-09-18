@@ -2,11 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
 import { useParams, useNavigate } from "react-router-dom";
 
-function CoasterReview({adjustFooterHeight}) {
-    function declareHeight(){
-		adjustFooterHeight(true)
-	}
-	useEffect(declareHeight,[])
+function CoasterReview() {
+    //function declareHeight(){
+	//	adjustFooterHeight(true)
+	//}
+	//useEffect(declareHeight,[])
 
     const {coasterID} = useParams()
     const {store, actions} = useContext(Context)
@@ -41,7 +41,7 @@ function CoasterReview({adjustFooterHeight}) {
                 })
             })
             .then(resp => {
-                if (resp.ok) navigate("/userprofile")
+                if (resp.ok) navigate(`/coaster/${coasterID}`)
             })
         }
         else return console.log("You either didn't score it or didn't right a review");
@@ -50,7 +50,7 @@ function CoasterReview({adjustFooterHeight}) {
     const scores = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     return (
-        <div className="container">
+        <div className="container min-vh-100">
             <h2 className="mt-4">Write your review for {coaster["name"]}</h2>
             <div className="mt-5">
                 <label className="form-label">
