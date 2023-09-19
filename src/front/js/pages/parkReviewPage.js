@@ -2,11 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
 import { useParams, useNavigate } from "react-router-dom";
 
-function ParkReview({adjustFooterHeight}) {
-    function declareHeight(){
-		adjustFooterHeight(true)
-	}
-	useEffect(declareHeight,[])
+function ParkReview() {
+    //function declareHeight(){
+	//	adjustFooterHeight(true)
+	//}
+	//useEffect(declareHeight,[])
 
     const {parkID} = useParams()
     const {store, actions} = useContext(Context)
@@ -41,7 +41,7 @@ function ParkReview({adjustFooterHeight}) {
                 })
             })
             .then(resp => {
-                if (resp.ok) navigate("/userprofile")
+                if (resp.ok) navigate(`/park/${parkID}`)
             })
         }
         else return console.log("You either didn't score it or didn't right a review");
@@ -52,7 +52,7 @@ function ParkReview({adjustFooterHeight}) {
     console.log("Token:", store.token)
 
     return (
-        <div className="container">
+        <div className="container min-vh-100">
             <h2 className="mt-4">Write your review for {park["name"]}</h2>
             <div className="mt-5">
                 <label className="form-label">

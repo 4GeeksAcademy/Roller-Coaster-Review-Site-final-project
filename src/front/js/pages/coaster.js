@@ -1,8 +1,12 @@
-import React, {useState, useEffect} from "react";
-import { useParams } from "react-router-dom";
+import React, {useState, useEffect, useContext} from "react";
+import { Context } from "../store/appContext";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 export default function Coaster() {
     const {coasterID} = useParams()
+    const navigate = useNavigate()
+    const { store, actions } = useContext(Context)
+
     const [coaster, setCoaster] = useState({})
 
     const url = `${process.env.BACKEND_URL}api/coasters/${coasterID}`
@@ -16,8 +20,10 @@ export default function Coaster() {
 
 
     useEffect(() => {console.log(coaster)}, [coaster])
+
+    console.log("Token: ", store.token)
     return (
-        <div className="coaster-container bg-light">
+        <div className="coaster-container mb-4">
             <div className="top-container d-flex gap-3 justify-content-center">
                 <div className="coaster-picture">
                     <img id="img" src="https://picsum.photos/500/300?random=1" />
@@ -32,7 +38,9 @@ export default function Coaster() {
                     </div>
                     <div className="coaster-locoation d-flex">
                         <i className="fa-solid fa-location-dot px-2 pt-1"></i>
-                        <p>{coaster.park_name} ({coaster.location})</p>
+                        <Link to={`/park/${coaster.park_id}`}>
+                            <p className="text-black">{coaster.park_name} ({coaster.location})</p>
+                        </Link>
                     </div>
                     <div>
                         <ul className="general-info">
@@ -57,7 +65,11 @@ export default function Coaster() {
             <div className="bottom-container bg-white mt-5 p-3 ">
                 <div className="review-header d-flex justify-content-between border-bottom border-secondary pb-1">
                     <h1>Review</h1>
-                    <button className="btn btn-success">write review</button>
+                    <button 
+                    className="btn btn-success" 
+                    onClick={() => navigate(`/review/coaster/${coasterID}`)}
+                    disabled={!store.token ? true : false}
+                    >Write Review</button>
                 </div>
                 <hr/>
                 <div className="review-content">
@@ -69,7 +81,9 @@ export default function Coaster() {
                                         <div className="review-user d-flex justify-content-between">
                                             <div className="d-flex">
                                                 <img className="rounded-circle" height="50px" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" />
-                                                <h4 className="mt-1 mx-2">{review.user_name}</h4>
+                                                <Link to={`/userprofile/${review.user_id}`}>
+                                                    <h4 className="mt-1 mx-2 text-black">{review.user_name}</h4>
+                                                </Link>
                                             </div>
                                             <div>
                                                 <i id="star" className="fa-solid fa-star">

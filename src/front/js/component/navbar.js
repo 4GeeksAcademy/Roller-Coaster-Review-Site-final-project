@@ -17,7 +17,9 @@ export const Navbar = () => {
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav ml-auto">
                     <li className="nav-item">
-                        <a className="nav-link" href="#">Find Park/Coasters</a>
+                        <Link to={`/search`}>
+                            <p className="mb-0 nav-link">Find Park/Coasters</p>
+                        </Link>
                     </li>
                     <li className="nav-item">
                         <a className="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false"><i className="fas fa-user"></i></a>
