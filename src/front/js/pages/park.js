@@ -45,7 +45,7 @@ export const Park = () => {
           <div className="container mt-5">
             <div className="d-flex gap-3 justify-content-center">
               <div className="">
-                <img id="img" src="https://picsum.photos/500/300?random=1" />
+                <img id="img" src={!park.image_url || park.image_url.length === 0 ? "https://picsum.photos/500/300?random=1" : park.image_url} style={{objectFit: "cover"}} />
               </div>
               <div className="">
                 <div className="d-flex">
