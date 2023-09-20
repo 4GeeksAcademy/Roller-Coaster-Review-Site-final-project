@@ -62,3 +62,37 @@ def setup_commands(app):
 
             db.session.commit()
 
+    @app.cli.command("pop-parks-and-coasters")
+    def pop_parks_and_coasters():
+        with open("./src/api/parks_and_coasters.json", "rt") as data:
+            parks = json.load(data)["parks"]
+
+            for park in parks:
+                db.session.merge(Park(
+                    name=park["name"],
+                    location=park["location"],
+                    year_opened=park["year_opened"],
+                    image_url=park["image_url"]
+                ))
+                db.session.commit()
+                print(f"Successfuly added {park['name']}")
+
+                park_id = Park.query.filter_by(name=park["name"]).first().id
+
+                for coaster in park["coasters"]:
+                    db.session.merge(Coaster(
+                        name=coaster["name"],
+                        year_opened=coaster["year_opened"],
+                        park_id=park_id,
+                        ride_type=coaster["ride_type"],
+                        image_url=coaster["image_url"],
+                        manufacturer=coaster["manufacturer"],
+                        track_length=coaster["track_length"],
+                        height=coaster["height"],
+                        tallest_drop=coaster["tallest_drop"],
+                        drop_angle=coaster["drop_angle"],
+                        max_speed=coaster["max_speed"],
+                        inversions=coaster["inversions"]
+                    ))
+                db.session.commit()
+                print(f"Successfully added coasters at {park['name']}")

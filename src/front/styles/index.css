@@ -57,9 +57,10 @@ body{
 .coaster-container{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     padding-top: 3rem;
+    min-height: 92vh;
 
 }
 .bottom-container{

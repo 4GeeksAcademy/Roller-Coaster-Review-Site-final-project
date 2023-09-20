@@ -23,7 +23,7 @@ class User(db.Model):
             "username" : self.username,
             "profile_pic" : self.profile_pic,
             "park_reviews" : [review.serialize() for review in self.park_reviews],
-            "coaster_reviews" : [review.serialize for review in self.coaster_reviews]
+            "coaster_reviews" : [review.serialize() for review in self.coaster_reviews]
             # do not serialize the password, its a security breach
         }
     
@@ -96,10 +96,11 @@ class ParkReview(db.Model):
     def serialize(self):
         return {
             "id" : self.id,
-            "user.id" : self.user_id,
+            "user_id" : self.user_id,
             "park_id" : self.park_id,
             "username" : self.user.username,
             "park_name" : self.park.name,
+            "location": self.park.location,
             "score" : self.score,
             "review_text" : self.review_text,
             "likes" : self.likes,
@@ -186,10 +187,11 @@ class CoasterReviews(db.Model):
     def serialize(self):
         return {
             "id" : self.id,
-            "user.id" : self.user_id,
+            "user_id" : self.user_id,
             "coaster_id" : self.coaster_id,
             "user_name" : self.user.username,
             "coaster_name": self.coaster.name,
+            "at_park": self.coaster.park.name,
             "score" : self.score,
             "review_text" : self.review_text,
             "likes" : self.likes,
