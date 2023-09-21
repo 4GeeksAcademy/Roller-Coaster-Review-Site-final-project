@@ -54,7 +54,7 @@ export default function Coaster() {
                             <li>Length: {coaster.track_length}</li>
                             <li>Height/Drop: {coaster.height} / {coaster.tallest_drop}</li>
                             <li>Drop Angle: {coaster.drop_angle}</li>
-                            <li>Max Speed: {coaster.type}</li>
+                            <li>Max Speed: {coaster.max_speed}</li>
                             <li>Inversions: {coaster.inversions}</li>
                             {/*<li>Ride Duration: 2:20</li>*/}
                         </ul>
