@@ -42,7 +42,7 @@ const Layout = () => {
                         <Route element={<UserProfile/>} path="/UserProfile" />
                         <Route element={<Signup adjustFooterHeight={setFixFooter}/>} path="/signup"/>
                         <Route element={<Login adjustFooterHeight={setFixFooter}/>} path="/login"/>
-                        <Route element={<ResetPassword />} path="/ResetPassword" component={ResetPassword} />
+                        <Route element={<ResetPassword />} path="/ResetPassword" component="/ResetPassword" />
                         
                     </Routes>
                     <Footer adjustHeight={fixFooter}/>

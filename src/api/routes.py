@@ -12,9 +12,12 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from api.models import ResetPassword, db, User, Park, Coaster, ResetPassword
 from api.utils import generate_sitemap, APIException
-
-
-
+from flask import Blueprint, request, jsonify
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+import random
+import string
 
 api = Blueprint('api', __name__)
 
@@ -216,24 +219,39 @@ def add_coaster_to_park():
 
     return '', 204
 
+import configparser
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
-
-# using SendGrid's Python Library
-# https://github.com/sendgrid/sendgrid-python
-import os
+config = configparser.ConfigParser()
+config.read("config.ini")
+    
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
-message = Mail(
-    from_email='from_email@example.com',
-    to_emails='to@example.com',
-    subject='Sending with Twilio SendGrid is Fun',
-    html_content='<strong>and easy to do anywhere, even with Python</strong>')
+def Reset_Password(SENDGRID_API_KEY,from_email,to_emails,subject,html_content):
+        if API!=None and from_email!=None and len(to_emails)>0:
+            message = Mail(from_email,to_emails,subject,html_content)
+            try:
+                sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+                response = sg.send(message)
+                print(response.status_code)
+                print(response.body)
+                print(response.headers)
+            except Exception as e:
+                print(e.message)
+
+
 try:
-    sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-    response = sg.send(message)
-    print(response.status_code)
-    print(response.body)
-    print(response.headers)
-except Exception as e:
-    print(e.message)
+        settings = config["SETTINGS"]
+except:
+        settings = {}
+
+API = settings.get("APIKEY" ,None)
+from_email = settings.get("FROM" ,None)
+to_emails = settings.get("TO" ,"")
+
+subject = "Sample Test Message"
+html_content = "Message successfully sent through SendGrid"
+
+Reset_Password(API,from_email, to_emails, subject, html_content)
