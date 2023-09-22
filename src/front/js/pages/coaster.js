@@ -54,7 +54,7 @@ export default function Coaster() {
                             <li>Length: {coaster.track_length}</li>
                             <li>Height/Drop: {coaster.height} / {coaster.tallest_drop}</li>
                             <li>Drop Angle: {coaster.drop_angle}</li>
-                            <li>Max Speed: {coaster.type}</li>
+                            <li>Max Speed: {coaster.max_speed}</li>
                             <li>Inversions: {coaster.inversions}</li>
                             {/*<li>Ride Duration: 2:20</li>*/}
                         </ul>
@@ -62,7 +62,7 @@ export default function Coaster() {
 
                 </div>
             </div>
-            <div className="bottom-container bg-white mt-5 p-3 ">
+            <div className="bottom-container bg-white mt-5 p-3 rounded">
                 <div className="review-header d-flex justify-content-between border-bottom border-secondary pb-1">
                     <h1>Review</h1>
                     <button 

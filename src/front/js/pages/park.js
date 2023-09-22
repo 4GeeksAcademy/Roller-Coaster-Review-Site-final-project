@@ -61,7 +61,7 @@ export const Park = () => {
               </div>
             </div>
           </div>
-          <div className="reviews-div container mt-5 mb-3 pt-3 pb-2">
+          <div className="reviews-div container mt-5 mb-3 pt-3 pb-2 rounded">
             <table className="table">
               <thead>
                 <tr>
@@ -85,7 +85,7 @@ export const Park = () => {
               </tbody>
             </table>
           </div>
-          <div className="reviews-div container mt-3 mb-5 pt-3 pb-2">
+          <div className="reviews-div container mt-3 mb-5 pt-3 pb-2 rounded">
             <div className="d-flex justify-content-between align-items-center">
               <h3>Reviews</h3>
               <button 
