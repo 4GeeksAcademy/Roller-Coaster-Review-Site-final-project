@@ -62,7 +62,7 @@ export default function Coaster() {
 
                 </div>
             </div>
-            <div className="bottom-container bg-white mt-5 p-3 ">
+            <div className="bottom-container bg-white mt-5 p-3 rounded">
                 <div className="review-header d-flex justify-content-between border-bottom border-secondary pb-1">
                     <h1>Review</h1>
                     <button 

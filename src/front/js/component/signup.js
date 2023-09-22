@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 export const Signup = ({adjustFooterHeight}) => {
-  function declareHeight(){
-		adjustFooterHeight(true)
-	}
+  //function declareHeight(){
+	//	adjustFooterHeight(true)
+	//}
 
-	useEffect(declareHeight,[])
+	//useEffect(declareHeight,[])
   const { store, actions } = useContext(Context)
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
@@ -23,13 +23,14 @@ export const Signup = ({adjustFooterHeight}) => {
     }
   })
   const signup = (e) => {
-    e.preventDefault(
-      actions.createUser(username, email, password)
-    )
+    e.preventDefault()
+    actions.createUser(username, email, password)
+    .then(resp => actions.login(email, password))
+    .then(resp => navigate("/search"))
   }
 
   return (
-    <>
+    <div className="container min-vh-100 text-center">
       <form className="loginForm">
         <div className="loginFormContent">
           <h1>Create an Account</h1>
@@ -71,6 +72,6 @@ export const Signup = ({adjustFooterHeight}) => {
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 }
