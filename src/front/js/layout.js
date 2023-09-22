@@ -45,7 +45,7 @@ const Layout = () => {
                         <Route element={<h1>Not found!</h1>} />
                         <Route element={<Park />} path="/park/:parkID" />
                         <Route element={<UserProfile />} path="/UserProfile/:userID" />
-                        <Route element={<Signup adjustFooterHeight={setFixFooter}/>} path="/signup"/>
+                        <Route element={<Signup />} path="/signup"/>
                         <Route element={<Login adjustFooterHeight={setFixFooter}/>} path="/login"/>
                     </Routes>
                     <Footer adjustHeight={fixFooter}/>
