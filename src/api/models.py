@@ -1,8 +1,11 @@
+from os import environ
+import random
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
+
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -20,13 +23,13 @@ class User(db.Model):
         return {
             "id": self.id,
             "email": self.email,
-            "username" : self.username,
-            "profile_pic" : self.profile_pic,
-            "park_reviews" : [review.serialize() for review in self.park_reviews],
-            "coaster_reviews" : [review.serialize() for review in self.coaster_reviews]
+            "username": self.username,
+            "profile_pic": self.profile_pic,
+            "park_reviews": [review.serialize() for review in self.park_reviews],
+            "coaster_reviews": [review.serialize() for review in self.coaster_reviews]
             # do not serialize the password, its a security breach
         }
-    
+
     @hybrid_property
     def password(self):
         return self._password
@@ -34,9 +37,10 @@ class User(db.Model):
     @password.setter
     def password(self, password):
         self._password = generate_password_hash(password)
-    
+
     def check_password(self, password):
         return check_password_hash(self._password, password)
+
 
 class Park(db.Model):
     __tablename__ = 'park'
@@ -61,16 +65,16 @@ class Park(db.Model):
 
     def serialize(self):
         return {
-            "id" : self.id,
-            "name" : self.name,
-            "location" : self.location,
-            "year_opened" : self.year_opened,
-            "avg_score" : self.calc_avg_rating([review.serialize() for review in self.reviews]),
-            "coasters" : [coaster.serialize() for coaster in self.coasters],
-            "reviews" : [review.serialize() for review in self.reviews],
-            "image_url" : self.image_url
+            "id": self.id,
+            "name": self.name,
+            "location": self.location,
+            "year_opened": self.year_opened,
+            "avg_score": self.calc_avg_rating([review.serialize() for review in self.reviews]),
+            "coasters": [coaster.serialize() for coaster in self.coasters],
+            "reviews": [review.serialize() for review in self.reviews],
+            "image_url": self.image_url
         }
-    
+
 
 class ParkReview(db.Model):
     __tablename__ = 'park_review'
@@ -95,17 +99,18 @@ class ParkReview(db.Model):
 
     def serialize(self):
         return {
-            "id" : self.id,
-            "user_id" : self.user_id,
-            "park_id" : self.park_id,
-            "username" : self.user.username,
-            "park_name" : self.park.name,
+            "id": self.id,
+            "user_id": self.user_id,
+            "park_id": self.park_id,
+            "username": self.user.username,
+            "park_name": self.park.name,
             "location": self.park.location,
-            "score" : self.score,
-            "review_text" : self.review_text,
-            "likes" : self.likes,
-            "dislikes" : self.dislikes
+            "score": self.score,
+            "review_text": self.review_text,
+            "likes": self.likes,
+            "dislikes": self.dislikes
         }
+
 
 class Coaster(db.Model):
     __tablename__ = "coaster"
@@ -139,29 +144,29 @@ class Coaster(db.Model):
             return round(avg_score / len(reviews), 1)
 
     def __repr__(self):
-            return f'<Coaster id={self.id} name={self.name}'
-    
+        return f'<Coaster id={self.id} name={self.name}'
+
     def serialize(self):
         return {
-            "id" : self.id,
-            "name" : self.name,
-            "park_name" : self.park.name,
-            "location" : self.park.location,
-            "park_id" : self.park_id,
+            "id": self.id,
+            "name": self.name,
+            "park_name": self.park.name,
+            "location": self.park.location,
+            "park_id": self.park_id,
             "year_opened": self.year_opened,
-            "ride_type" : self.ride_type,
-            "manufacturer" : self.manufacturer,
-            "track_length" : self.track_length,
-            "height" : self.height,
-            "tallest_drop" : self.height,
-            "drop_angle" : self.drop_angle,
-            "max_speed" : self.max_speed,
-            "inversions" : self.inversions,
-            "reviews" : [review.serialize() for review in self.reviews],
-            "avg_score" : self.calc_avg_rating([review.serialize() for review in self.reviews]),
-            "image_url" : self.image_url
+            "ride_type": self.ride_type,
+            "manufacturer": self.manufacturer,
+            "track_length": self.track_length,
+            "height": self.height,
+            "tallest_drop": self.height,
+            "drop_angle": self.drop_angle,
+            "max_speed": self.max_speed,
+            "inversions": self.inversions,
+            "reviews": [review.serialize() for review in self.reviews],
+            "avg_score": self.calc_avg_rating([review.serialize() for review in self.reviews]),
+            "image_url": self.image_url
         }
-    
+
 
 class CoasterReviews(db.Model):
     __tablename__ = "coaster_reviews"
@@ -186,14 +191,44 @@ class CoasterReviews(db.Model):
 
     def serialize(self):
         return {
-            "id" : self.id,
-            "user_id" : self.user_id,
-            "coaster_id" : self.coaster_id,
-            "user_name" : self.user.username,
+            "id": self.id,
+            "user_id": self.user_id,
+            "coaster_id": self.coaster_id,
+            "user_name": self.user.username,
             "coaster_name": self.coaster.name,
             "at_park": self.coaster.park.name,
-            "score" : self.score,
-            "review_text" : self.review_text,
-            "likes" : self.likes,
-            "dislikes" : self.dislikes
+            "score": self.score,
+            "review_text": self.review_text,
+            "likes": self.likes,
+            "dislikes": self.dislikes
         }
+
+
+class ResetPassword(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(60), nullable=False)
+
+    def __init__(self, email, password):
+        self.email = email
+        self.password = password
+
+
+#        import os
+#from sendgrid import SendGridAPIClient
+#from sendgrid.helpers.mail import Mail
+#
+#message = Mail(
+#    from_email='from_email@example.com',
+#    to_emails='to@example.com',
+#    subject='Sending with Twilio SendGrid is Fun',
+#    html_content='<strong>and easy to do anywhere, even with Python</strong>')
+#try:
+#    sg = SendGridAPIClient(environ.get('SENDGRID_API_KEY'))
+#    response = sg.send(message)
+#    print(response.status_code)
+#    print(response.body)
+#    print(response.headers)
+#except Exception as e:
+#    print(e.message)
+#

@@ -1,12 +1,23 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+import requests
+from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
+import string
+import random
+from collections import UserString
+from sys import setprofile
 from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from api.models import db, User, Park, Coaster, ParkReview, CoasterReviews
+from api.models import db, User, Park, Coaster, ParkReview, CoasterReviews, ResetPassword
 from api.utils import generate_sitemap, APIException
-
+from flask import Blueprint, request, jsonify
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 import random
+import string
 
 api = Blueprint('api', __name__)
 
@@ -43,7 +54,7 @@ def signup():
     if user:
         print("the user exists")
         return jsonify(message="This user already exists. Get outta here!"), 400
-    
+
     user = User(
         email=data["email"],
         password=data["password"],
@@ -52,6 +63,7 @@ def signup():
     db.session.add(user)
     db.session.commit()
     return '', 204
+
 
 @api.route('/login', methods=['POST'])
 def login():
@@ -72,6 +84,7 @@ def login():
     token = create_access_token(user.email)
     return jsonify(token=token), 200
 
+
 @api.route('/parks', methods=['GET'])
 def get_all_parks():
     parks = Park.query.all()
@@ -79,6 +92,7 @@ def get_all_parks():
     return jsonify(
         parks=[park.serialize() for park in parks]
     ), 200
+
 
 @api.route('/parks', methods=['POST'])
 def add_park():
@@ -112,17 +126,19 @@ def add_park():
     '''
     park = request.json['park']
 
-    the_same_park = Park.query.filter_by(name=park['name'], location=park["location"]).first()
+    the_same_park = Park.query.filter_by(
+        name=park['name'], location=park["location"]).first()
     if the_same_park:
         return jsonify("This park is already in our database"), 400
-        
+
     db.session.merge(Park(
         name=park['name'],
         location=park['location'],
         year_opened=park['year_opened']
     ))
     db.session.commit()
-    park_id = Park.query.filter_by(name=park["name"], location=park["location"]).first().id
+    park_id = Park.query.filter_by(
+        name=park["name"], location=park["location"]).first().id
 
     for coaster in park['coasters']:
         db.session.merge(Coaster(
@@ -142,11 +158,13 @@ def add_park():
 
     return jsonify("Park successfully merged!"), 204
 
+
 @api.route('/parks/<int:id>', methods=['GET'])
 def get_park(id):
     park = Park.query.filter_by(id=id).first()
 
     return jsonify(park.serialize()), 200
+
 
 @api.route('/coasters', methods=['GET'])
 def get_all_coasters():
@@ -155,6 +173,7 @@ def get_all_coasters():
     return jsonify(
         coasters=[coaster.serialize() for coaster in coasters]
     ), 200
+
 
 @api.route('/coasters', methods=['POST'])
 def add_coaster_to_park():
@@ -182,10 +201,11 @@ def add_coaster_to_park():
     '''
     coaster = request.json["roller_coaster"]
 
-    park = Park.query.filter_by(name=coaster["park_name"], location=coaster["location"]).first()
+    park = Park.query.filter_by(
+        name=coaster["park_name"], location=coaster["location"]).first()
     if not park:
         return jsonify("The park listed is not in our database. We can't add this coaster to our database."), 400
-    
+
     db.session.merge(Coaster(
         name=coaster["name"],
         year_opened=coaster["year_opened"],
@@ -286,3 +306,40 @@ def add_coaster_review(id):
     db.session.commit()
 
     return '', 204
+
+import configparser
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+
+config = configparser.ConfigParser()
+config.read("config.ini")
+    
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
+def Reset_Password(SENDGRID_API_KEY,from_email,to_emails,subject,html_content):
+    if API!=None and from_email!=None and len(to_emails)>0:
+        message = Mail(from_email,to_emails,subject,html_content)
+        try:
+            sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+            response = sg.send(message)
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+        except Exception as e:
+            print(e.message)
+
+    #It looks like this wasn't indented, make sure this still works
+    try:
+            settings = config["SETTINGS"]
+    except:
+            settings = {}
+
+    API = settings.get("APIKEY" ,None)
+    from_email = settings.get("FROM" ,None)
+    to_emails = settings.get("TO" ,"")
+
+    subject = "Sample Test Message"
+    html_content = "Message successfully sent through SendGrid"
+
+    Reset_Password(API,from_email, to_emails, subject, html_content)
