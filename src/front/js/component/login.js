@@ -17,7 +17,7 @@ export default function Login({adjustFooterHeight}) {
     e.preventDefault();
     actions
       .login(email, password)
-      .then((res) => { navigate("/userprofile") })
+      .then((res) => { navigate("/search") })
     // .catch((err) => setError(err));
     // Submit email/password here
   };

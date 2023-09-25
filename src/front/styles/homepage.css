@@ -25,8 +25,6 @@
 
 
 .footer {
-    /* position: fixed; */
-    bottom: 0;
     width: 100%;
 }
 
@@ -56,4 +54,8 @@
 .footer .col-lg-6,
 .footer .col-md-12 {
     flex: 1;
+}
+
+.reviews-div {
+    background-color: white;
 }

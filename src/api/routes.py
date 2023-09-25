@@ -10,7 +10,7 @@ from collections import UserString
 from sys import setprofile
 from flask import Flask, request, jsonify, url_for, Blueprint
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from api.models import ResetPassword, db, User, Park, Coaster, ResetPassword
+from api.models import db, User, Park, Coaster, ParkReview, CoasterReviews, ResetPassword
 from api.utils import generate_sitemap, APIException
 from flask import Blueprint, request, jsonify
 import os
@@ -31,6 +31,11 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+@api.route('/user/<int:id>', methods=['GET'])
+def get_user(id):
+    user = User.query.filter_by(id=id).first()
+
+    return jsonify(user.serialize()), 200
 
 @api.route('/signup', methods=['POST'])
 def signup():
@@ -219,6 +224,89 @@ def add_coaster_to_park():
 
     return '', 204
 
+@api.route('/coasters/<int:id>', methods=['GET'])
+def get_coaster(id):
+    coaster = Coaster.query.filter_by(id=id).first()
+
+    return jsonify(coaster.serialize()), 200
+
+@api.route('/review/park/<int:id>', methods=['POST'])
+@jwt_required()
+def add_park_review(id):
+    '''
+    POST
+    {
+        score: int, <-- Between 1 and 10
+        review_text: string
+    }
+    '''
+    review = request.json
+    user = User.query.filter_by(email=get_jwt_identity()).first()
+
+    num_of_users = len(User.query.all())
+
+    park = Park.query.filter_by(id=id).first()
+    if not park:
+        return jsonify("This park is not in our database"), 400
+
+    user_review_of_same_park = ParkReview.query.filter_by(user_id=user.id, park_id=id).first()
+    if user_review_of_same_park:
+        return jsonify("You've already written review of this park. You can only review a park once!"), 400
+
+    if review["score"] < 1 or review["score"] > 10:
+        return jsonify('This score is not valid, it must be between 1 and 10'), 400
+    if not review["review_text"]:
+        return jsonify("You need to actually right a review. Not just put a score and leave"), 400
+
+    db.session.merge(ParkReview(
+        user_id=user.id,
+        park_id=id,
+        score=review["score"],
+        review_text=review["review_text"]
+    ))
+
+    db.session.commit()
+
+    return '', 204
+
+@api.route('/review/coaster/<int:id>', methods=['POST'])
+@jwt_required()
+def add_coaster_review(id):
+    '''
+    POST
+    {
+        score: int, <-- Between 1 and 10
+        review_text: string
+    }
+    '''
+    review = request.json
+    user = User.query.filter_by(email=get_jwt_identity()).first()
+
+    #num_of_users = len(User.query.all())
+
+    coaster = Coaster.query.filter_by(id=id).first()
+    if not coaster:
+        return jsonify('This coaster is not in our database.'), 400
+    
+    user_review_of_same_coaster = CoasterReviews.query.filter_by(user_id=user.id, coaster_id=id).first()
+    if user_review_of_same_coaster:
+        return jsonify("You've already written review of this coaster. You can only review a coaster once!"), 400
+
+    if review["score"] < 1 or review["score"] > 10:
+        return jsonify('This score is not valid, it must be between 1 and 10'), 400
+    if not review["review_text"]:
+        return jsonify("You need to actually right a review. Not just put a score and leave"), 400
+    
+    db.session.merge(CoasterReviews(
+        user_id=user.id,
+        coaster_id=id,
+        score=review["score"],
+        review_text=review["review_text"]
+    ))
+    db.session.commit()
+
+    return '', 204
+
 import configparser
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -230,28 +318,28 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
 def Reset_Password(SENDGRID_API_KEY,from_email,to_emails,subject,html_content):
-        if API!=None and from_email!=None and len(to_emails)>0:
-            message = Mail(from_email,to_emails,subject,html_content)
-            try:
-                sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-                response = sg.send(message)
-                print(response.status_code)
-                print(response.body)
-                print(response.headers)
-            except Exception as e:
-                print(e.message)
+    if API!=None and from_email!=None and len(to_emails)>0:
+        message = Mail(from_email,to_emails,subject,html_content)
+        try:
+            sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+            response = sg.send(message)
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+        except Exception as e:
+            print(e.message)
 
+    #It looks like this wasn't indented, make sure this still works
+    try:
+            settings = config["SETTINGS"]
+    except:
+            settings = {}
 
-try:
-        settings = config["SETTINGS"]
-except:
-        settings = {}
+    API = settings.get("APIKEY" ,None)
+    from_email = settings.get("FROM" ,None)
+    to_emails = settings.get("TO" ,"")
 
-API = settings.get("APIKEY" ,None)
-from_email = settings.get("FROM" ,None)
-to_emails = settings.get("TO" ,"")
+    subject = "Sample Test Message"
+    html_content = "Message successfully sent through SendGrid"
 
-subject = "Sample Test Message"
-html_content = "Message successfully sent through SendGrid"
-
-Reset_Password(API,from_email, to_emails, subject, html_content)
+    Reset_Password(API,from_email, to_emails, subject, html_content)

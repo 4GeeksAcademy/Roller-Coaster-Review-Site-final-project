@@ -26,7 +26,7 @@ class User(db.Model):
             "username": self.username,
             "profile_pic": self.profile_pic,
             "park_reviews": [review.serialize() for review in self.park_reviews],
-            "coaster_reviews": [review.serialize for review in self.coaster_reviews]
+            "coaster_reviews": [review.serialize() for review in self.coaster_reviews]
             # do not serialize the password, its a security breach
         }
 
@@ -100,10 +100,11 @@ class ParkReview(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "user.id": self.user_id,
+            "user_id": self.user_id,
             "park_id": self.park_id,
             "username": self.user.username,
             "park_name": self.park.name,
+            "location": self.park.location,
             "score": self.score,
             "review_text": self.review_text,
             "likes": self.likes,
@@ -191,10 +192,11 @@ class CoasterReviews(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "user.id": self.user_id,
+            "user_id": self.user_id,
             "coaster_id": self.coaster_id,
             "user_name": self.user.username,
             "coaster_name": self.coaster.name,
+            "at_park": self.coaster.park.name,
             "score": self.score,
             "review_text": self.review_text,
             "likes": self.likes,
@@ -212,20 +214,21 @@ class ResetPassword(db.Model):
         self.password = password
 
 
-        import os
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
-
-message = Mail(
-    from_email='from_email@example.com',
-    to_emails='to@example.com',
-    subject='Sending with Twilio SendGrid is Fun',
-    html_content='<strong>and easy to do anywhere, even with Python</strong>')
-try:
-    sg = SendGridAPIClient(environ.get('SENDGRID_API_KEY'))
-    response = sg.send(message)
-    print(response.status_code)
-    print(response.body)
-    print(response.headers)
-except Exception as e:
-    print(e.message)
+#        import os
+#from sendgrid import SendGridAPIClient
+#from sendgrid.helpers.mail import Mail
+#
+#message = Mail(
+#    from_email='from_email@example.com',
+#    to_emails='to@example.com',
+#    subject='Sending with Twilio SendGrid is Fun',
+#    html_content='<strong>and easy to do anywhere, even with Python</strong>')
+#try:
+#    sg = SendGridAPIClient(environ.get('SENDGRID_API_KEY'))
+#    response = sg.send(message)
+#    print(response.status_code)
+#    print(response.body)
+#    print(response.headers)
+#except Exception as e:
+#    print(e.message)
+#
